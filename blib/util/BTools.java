@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 public class BTools { // general class for general tools that i use a lot
 
+    private static Random rand = new Random();
+
     public static int getDistance(Point p1, Point p2){ // gets the distance between p1 and p2
         int distX = Math.abs(p2.x - p1.x);
         int distY = Math.abs(p2.y - p1.y);
@@ -83,7 +85,6 @@ public class BTools { // general class for general tools that i use a lot
             min = temp;
         }
         if(max == min) return max; // same number, just return the number
-        Random rand = new Random();
         return rand.nextInt(max - min) + min; // generate number
     }
 
@@ -112,7 +113,6 @@ public class BTools { // general class for general tools that i use a lot
             max -= maxInt;
         }
         double randDecimal = 0;
-        Random rand = new Random();
         do{
             randDecimal = rand.nextDouble();
         }while(randDecimal < min || randDecimal > max);

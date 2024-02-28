@@ -65,7 +65,10 @@ public class LightManager {
         g2d.dispose();
 
         if(fancyEdges){
-            blur.filter(light, light);
+            try{
+                blur.filter(light, light);
+            }catch(Exception e){}
+            
         }
 
         g.drawImage(light, 0, 0, cam.panel);

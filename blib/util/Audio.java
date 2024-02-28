@@ -18,6 +18,7 @@ public class Audio {
 			fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 			fc.setValue((float)volume / 2 - 45f);
 			clip.start();
+			audioIn.close();
 			return clip;
 		}catch(Exception e){}
 		return null;
@@ -34,6 +35,7 @@ public class Audio {
 			fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 			fc.setValue((float)(volume / 2 * vol) - 45f);
 			clip.start();
+			audioIn.close();
 			return clip;
 		}catch(Exception e){}
 		return null;

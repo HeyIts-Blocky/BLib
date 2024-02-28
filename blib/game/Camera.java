@@ -2,12 +2,12 @@ package blib.game;
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
-
-import blib.util.Position;
+import blib.util.*;
 public class Camera {
     public Position pos;
     public JPanel panel;
     public Dimension setDimension = null;
+    public int renderDistance = 800;
 
     public Camera(Position p, JPanel panel){
         pos = p;
@@ -15,15 +15,7 @@ public class Camera {
     }
 
     public void render(Graphics g, ArrayList<Entity> renderList){
-        int width = panel.getWidth();
-        int height = panel.getHeight();
-        if(setDimension != null){
-            width = setDimension.width;
-            height = setDimension.height;
-        }
-        for(Entity e: renderList){
-            e.render(g, panel, (int)(((e.position.x) - pos.x) + (width / 2)), (int)(((e.position.y) - pos.y) + (height / 2)));
-        }
+        render(g, renderList, 0, 0);
     }
     public void render(Graphics g, ArrayList<Entity> renderList, int offX, int offY){
         int width = panel.getWidth();
@@ -33,7 +25,9 @@ public class Camera {
             height = setDimension.height;
         }
         for(Entity e: renderList){
-            e.render(g, panel, (int)(((e.position.x) - (pos.x + offX)) + (width / 2)), (int)(((e.position.y) - (pos.y + offY)) + (height / 2)));
+            if(BTools.getDistance(pos, e.position) <= renderDistance || e.alwaysRender){
+                e.render(g, panel, (int)(((e.position.x) - (pos.x + offX)) + (width / 2)), (int)(((e.position.y) - (pos.y + offY)) + (height / 2)));
+            }
         }
     }
 

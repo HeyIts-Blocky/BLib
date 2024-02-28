@@ -6,6 +6,7 @@ import blib.util.Position;
 public class Entity { // meant to be extended off of
     public Position position;
     public int renderType = 0;
+    public boolean alwaysRender = false;
     public static final int TALL = 0, UNDER = 1, ABOVE = 2, TOPPRIORITY = 3, BOTTOMPRIORITY = 4;
     /*
      * TALL = Camera will put this so that it will render so you can go in front or behind the object

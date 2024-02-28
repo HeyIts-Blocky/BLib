@@ -44,6 +44,11 @@ public class KeyManager { // Reads, stores, and returns key input information
 
     public void reset(){ // resets everything to false
         keys = new boolean[255];
+        lmb = false;
+        mmb = false;
+        rmb = false;
+        mb4 = false;
+        mb5 = false;
     }
 
     public void enable(){
