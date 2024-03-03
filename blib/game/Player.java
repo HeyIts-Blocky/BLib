@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
 public class Player extends PlayerController{
+
     public Camera camera;
     private ImageIcon[] images;
     private AnimImage[] animImages;
@@ -16,9 +17,16 @@ public class Player extends PlayerController{
     private int direction = 1;
     public boolean shortCollision = false;
     public static int NORTH = 0, SOUTH = 1, EAST = 2, WEST = 3;
+    
+    // camera smoothing
+    public int smoothType = 1;
+    public static final int NOSMOOTH = 0, BASICSMOOTH = 1;
+    public double smoothAmount = 2;
+    private Position offset = new Position();
+
     public Player(Position pos, KeyManager km, double speed, JPanel panel, String imgPath){
         super(pos, km, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, speed, 700);
-        camera = new Camera(pos, panel);
+        camera = new Camera(pos.copy(), panel);
         images = new ImageIcon[4];
         images[0] = new ImageIcon(imgPath + "/idleN.png");
         images[1] = new ImageIcon(imgPath + "/idleS.png");
@@ -33,7 +41,7 @@ public class Player extends PlayerController{
     }
     public Player(Position pos, KeyManager km, double speed, JPanel panel, String imgPath, int frameWidth, int frameHeight){
         super(pos, km, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, speed, 700);
-        camera = new Camera(pos, panel);
+        camera = new Camera(pos.copy(), panel);
         images = new ImageIcon[4];
         images[0] = new ImageIcon(imgPath + "/idleN.png");
         images[1] = new ImageIcon(imgPath + "/idleS.png");
@@ -57,13 +65,24 @@ public class Player extends PlayerController{
         if(km.getKeyDown(right)) direction = 2;
 
         for(AnimImage i: animImages) i.update(elapsedTime);
+
+        // camera smoothing
+
+        if(smoothType == NOSMOOTH){
+            offset = new Position();
+        }
+        if(smoothType == BASICSMOOTH){
+            offset = new Position(-getVelocity().x * smoothAmount * 20 * speed, -getVelocity().y * smoothAmount * 20 * speed);
+        }
+
+        camera.pos = new Position(getX() + offset.x, getY() + offset.y);
     }
 
     public void render(JPanel panel, Graphics g, int x, int y){
         if(moving){
-            animImages[direction].paint(panel, g, x, y);
+            animImages[direction].paint(panel, g, x - (int)offset.x, y - (int)offset.y);
         }else{
-            images[direction].paintIcon(panel, g, x, y);
+            images[direction].paintIcon(panel, g, x - (int)offset.x, y - (int)offset.y);
         }
     }
 
@@ -95,18 +114,34 @@ public class Player extends PlayerController{
     }
 
     public void updateWithCollision(long elapsedTime, ArrayList<Rectangle> collisions){
+        Position startPos = getPos().copy();
         update(elapsedTime);
         Rectangle plrRect = getCollision();
         for(Rectangle rect: collisions){
+            Position vel = getVelocity().copy();
             // check x
             if(rect.intersects(plrRect)){
-                move(-getVelocity().x * elapsedTime * speed, 0);
-                setVelocity(new Position(0, getVelocity().y));
+                Position pos = getPos().copy();
+                goToPos(startPos.x, getY());
+                setVelocity(new Position(0, vel.y));
+                plrRect = getCollision();
+                if(rect.intersects(plrRect)){
+                    goToPos(pos);
+                    plrRect = getCollision();
+                }
             }
             // check y
             if(rect.intersects(plrRect)){
-                move(0, -getVelocity().y * elapsedTime * speed);
-                setVelocity(new Position(getVelocity().x, 0));
+                goToPos(getX(), startPos.y);
+                setVelocity(new Position(vel.x, 0));
+                plrRect = getCollision();
+
+                // check x
+                if(rect.intersects(plrRect)){
+                    goToPos(startPos.x, getY());
+                    setVelocity(new Position(0, vel.y));
+                    plrRect = getCollision();
+                }
             }
         }
         if(getVelocity().x != 0 || getVelocity().y != 0) moving = true;
