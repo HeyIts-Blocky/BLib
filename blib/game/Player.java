@@ -57,6 +57,7 @@ public class Player extends PlayerController{
 
     public void update(long elapsedTime){
         super.update(elapsedTime);
+        camera.update(elapsedTime);
         if(getVelocity().x != 0 || getVelocity().y != 0) moving = true;
         else moving = false;
         if(km.getKeyDown(up)) direction = 0;
@@ -79,11 +80,21 @@ public class Player extends PlayerController{
     }
 
     public void render(JPanel panel, Graphics g, int x, int y){
+        Image img;
+        int width, height;
         if(moving){
-            animImages[direction].paint(panel, g, x - (int)offset.x, y - (int)offset.y);
+            img = animImages[direction].getImage();
+            width = (int)(animImages[direction].width / camera.zoom);
+            height = (int)(animImages[direction].height / camera.zoom);
         }else{
-            images[direction].paintIcon(panel, g, x - (int)offset.x, y - (int)offset.y);
+            img = images[direction].getImage();
+            width = (int)(images[direction].getIconWidth() / camera.zoom);
+            height = (int)(images[direction].getIconHeight() / camera.zoom);
         }
+        int xDelta = (int)(-offset.x / camera.zoom) - width / 2;
+        int yDelta = (int)(-offset.y / camera.zoom) - height / 2;
+
+        g.drawImage(img, x + xDelta, y + yDelta, width, height, null);
     }
 
     public int getDirection(){

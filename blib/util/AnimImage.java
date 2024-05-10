@@ -74,6 +74,27 @@ public class AnimImage {
         }
     }
 
+    public Image getImage(){
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics g2 = img.getGraphics();
+        int f = 0, x2 = 0, y2 = 0;
+        boolean leave = false;
+        for(int y3 = 0; y3 < spriteSheet.getIconHeight(); y3 += height){
+            for(int x3 = 0; x3 < spriteSheet.getIconWidth(); x3 += width){
+                if(f == currentFrame){
+                    x2 = x3;
+                    y2 = y3;
+                    leave = true;
+                    break;
+                }
+                f++;
+            }
+            if(leave) break;
+        }
+        g2.drawImage(spriteSheet.getImage(), -x2, -y2, null);
+        return img;
+    }
+
     public void update(long elapsedTime){
         timer += elapsedTime;
         if(timer >= delay){

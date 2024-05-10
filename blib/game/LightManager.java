@@ -31,8 +31,7 @@ public class LightManager {
         }
 
         // get graphics
-        Dimension dimension = new Dimension(cam.panel.getWidth(), cam.panel.getHeight());
-        if(cam.setDimension != null) dimension = cam.setDimension;
+        Dimension dimension = cam.getDimension();
         BufferedImage light = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = light.createGraphics();
 
@@ -71,7 +70,8 @@ public class LightManager {
             
         }
 
-        g.drawImage(light, 0, 0, cam.panel);
+        Dimension d = cam.getDimensionNoZoom();
+        g.drawImage(light, 0, 0, d.width, d.height, cam.panel);
     }
     private void applyRenderHints(Graphics2D g2d){
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
