@@ -98,6 +98,10 @@ public class Player extends PlayerController{
         return moving;
     }
 
+    public Position getOffset(){
+        return offset.copy();
+    }
+
     public void resizeImages(int width, int height){
         for(int i = 0; i < images.length; i++){
             images[i].setImage(images[i].getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT));

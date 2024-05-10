@@ -286,5 +286,16 @@ public class BTools { // general class for general tools that i use a lot
             Runtime.getRuntime().exec("explorer.exe /select, " + path);
         }catch(Exception e){}
     }
+
+    public static double normalizeRadians(double dir){
+        while(dir > Math.PI * 2) dir -= Math.PI * 2;
+        while(dir < 0) dir += Math.PI * 2;
+        return dir;
+    }
+    public static double normalizeDegrees(double dir){
+        while(dir > 360) dir -= 360;
+        while(dir < 0) dir += 360;
+        return dir;
+    }
     
 }

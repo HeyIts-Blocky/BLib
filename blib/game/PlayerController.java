@@ -12,14 +12,14 @@ public class PlayerController { // Generic player class that doesn't do too much
     //  3. Position
     // >***<
 
-    private Position position;
+    protected Position position;
     public KeyManager km = null;
     public int up, down, left, right;
     public double speed;
 
     public final boolean advMovement;
     public double acceleration;
-    private Position velocity = new Position();
+    protected Position velocity = new Position();
 
     public PlayerController(Position pos){ // Only holds a point as a position
         position = pos;

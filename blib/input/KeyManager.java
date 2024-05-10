@@ -59,6 +59,14 @@ public class KeyManager { // Reads, stores, and returns key input information
         enabled = false;
     }
 
+    public void resetDelta(){
+        mouseDelta = new Point();
+    }
+
+    public void setMousePos(int x, int y){
+        mousePos = new Point(x, y);
+    }
+
     private void checkPressedKey(int key){
         if(!getKeyDown(key)) onKeyPressed(key);
     }
